@@ -23,9 +23,7 @@ const ConfirmDialog = ({
           <Text style={styles.cdTitle}>
             Are you sure you want to Delete this Issue ?
           </Text>
-          <Text style={styles.cdDesc}>
-            If you're not sure, please press no.
-          </Text>
+          {/* <Text style={styles.cdDesc}>If you're not sure, press no.</Text> */}
 
           <View style={styles.actionButtons}>
             <TouchableOpacity
@@ -74,15 +72,18 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "600",
     textAlign: "center",
+    marginBottom: 10,
   },
 
   cdDesc: {
     fontSize: 15,
+    marginBottom: 5,
   },
 
   actionIcon: {
     height: 80,
     width: 80,
+    marginBottom: 5,
   },
 
   actionButtons: {
@@ -104,7 +105,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#E8EAED",
   },
   delete: {
-    backgroundColor: "#29c84d",
+    backgroundColor: "#55BCF6", // "#29c84d",
   },
   textWhite: {
     color: "#FFFFFF",

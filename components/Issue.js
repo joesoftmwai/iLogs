@@ -51,7 +51,7 @@ const Issue = ({ openED, issue, setSelectedIssue }) => {
         <View style={styles.issueIcon}>
           <Image
             style={styles.issueIcon}
-            source={require("../assets/icon-to-do.png")}
+            source={require("../assets/icons-to-dos.png")}
           />
         </View>
 

@@ -48,8 +48,13 @@ export default function App() {
 
     const index = issuesArr.findIndex((item) => item.id === issueId);
 
+    console.log("issueId::::::::::::", issueId);
+    console.log("index::::::::::::", index);
+
+    
+
     if (index !== -1) {
-      issuesArr.splice(index);
+      issuesArr.splice(index, 1);
       setIssues(issuesArr);
       showToast("Issue deleted successfully");
       setIssue(null);
