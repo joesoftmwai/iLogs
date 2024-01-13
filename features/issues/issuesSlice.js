@@ -19,7 +19,54 @@ export const getIssues = createAsyncThunk(
     try {
       return await issuesService.getIssues();
     } catch (error) {
-      // console.error("Error in API request:", error);
+      const message = handleFailure(error);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const logIssue = createAsyncThunk(
+  "log-issue",
+  async (data, thunkAPI) => {
+    try {
+      return await issuesService.logIssue(data);
+    } catch (error) {
+      const message = handleFailure(error);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const getIisssue = createAsyncThunk(
+  "get-i-issue",
+  async (id, thunkAPI) => {
+    try {
+      return await issuesService.getIisssue(id);
+    } catch (error) {
+      const message = handleFailure(error);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const updateIssue = createAsyncThunk(
+  "update-issue",
+  async (data, thunkAPI) => {
+    try {
+      return await issuesService.updateIssue(data);
+    } catch (error) {
+      const message = handleFailure(error);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const deleteIssue = createAsyncThunk(
+  "delete-issue",
+  async (id, thunkAPI) => {
+    try {
+      return await issuesService.deleteIssue(id);
+    } catch (error) {
       const message = handleFailure(error);
       return thunkAPI.rejectWithValue(message);
     }
@@ -54,6 +101,65 @@ export const issuesSlice = createSlice({
         state.isError = true;
         state.msg = action.payload;
         state.issues = [];
+      })
+      .addCase(logIssue.pending, (state) => {
+        state.isProcessing = true;
+      })
+      .addCase(logIssue.fulfilled, (state, action) => {
+        state.isProcessing = false;
+        state.isSuccess = true;
+        state.issues.unshift(action.payload);
+        state.msg = "Issues logged successfully.";
+      })
+      .addCase(logIssue.rejected, (state, action) => {
+        state.isProcessing = false;
+        state.isError = true;
+        state.msg = action.payload;
+      })
+      .addCase(getIisssue.pending, (state) => {
+        state.isLoadingI = true;
+      })
+      .addCase(getIisssue.fulfilled, (state, action) => {
+        state.isLoadingI = false;
+        state.isSuccess = true;
+        state.issues = action.payload;
+      })
+      .addCase(getIisssue.rejected, (state, action) => {
+        state.isLoadingI = false;
+        state.isError = true;
+        state.msg = action.payload;
+        state.iIssue = {};
+      })
+
+      .addCase(updateIssue.pending, (state) => {
+        state.isProcessing = true;
+      })
+      .addCase(updateIssue.fulfilled, (state, action) => {
+        state.isProcessing = false;
+        state.isSuccess = true;
+        state.msg = "Issues Updated successfully.";
+      })
+      .addCase(updateIssue.rejected, (state, action) => {
+        state.isProcessing = false;
+        state.isError = true;
+        state.msg = action.payload;
+      })
+      .addCase(deleteIssue.pending, (state) => {
+        state.isProcessing = true;
+      })
+      .addCase(deleteIssue.fulfilled, (state, action) => {
+        state.isProcessing = false;
+        state.isSuccess = true;
+        state.msg = "Issues Deleted successfully.";
+        const index = state.issues.findIndex(
+          (issue) => issue._id == action.payload
+        );
+        if (index != -1) state.issues.splice(index, 1);
+      })
+      .addCase(deleteIssue.rejected, (state, action) => {
+        state.isProcessing = false;
+        state.isError = true;
+        state.msg = action.payload;
       });
   },
 });
