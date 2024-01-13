@@ -19,7 +19,15 @@ import uuid from "react-native-uuid";
 import { useDispatch, useSelector } from "react-redux";
 import { logIssue, reset } from "../features/issues/issuesSlice";
 
-const AddIssue = ({ modalRef, snapPoints, addIssue, close }) => {
+const AddIssue = ({
+  modalRef,
+  snapPoints,
+  addIssue,
+  close,
+  closeEI,
+  closeED,
+  closeCD,
+}) => {
   const dispatch = useDispatch();
   const { isError, isSuccess, msg } = useSelector((state) => state.issues);
   const [title, setTitle] = useState("");
@@ -64,9 +72,16 @@ const AddIssue = ({ modalRef, snapPoints, addIssue, close }) => {
     setPriority("Low");
     setStatus("");
   };
-  const formatPriority = (data) => {
-    console.log("data", data);
 
+  const cleanup = () => {
+    clearForm();
+    close();
+    closeEI();
+    closeED();
+    closeCD();
+  };
+
+  const formatPriority = (data) => {
     if (!data) return;
     let fPriority = null;
     switch (data.toLowerCase()) {
@@ -92,8 +107,7 @@ const AddIssue = ({ modalRef, snapPoints, addIssue, close }) => {
     }
     if (isSuccess && msg) {
       showToast(msg);
-      clearForm();
-      close();
+      cleanup();
     }
     return () => {
       dispatch(reset());

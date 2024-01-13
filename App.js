@@ -120,6 +120,9 @@ export default function App() {
           snapPoints={aIsnapPoints}
           addIssue={addIssue}
           close={closeAI}
+          closeEI={closeEI}
+          closeED={closeED}
+          closeCD={closeCD}
         />
         <EditIssue
           modalRef={eIbsModalRef}

@@ -10,7 +10,6 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { getIssues, reset } from "../features/issues/issuesSlice";
 import Issue from "./Issue";
-import axios from "axios";
 
 const Issues = ({ tempIssues, issue, openED, setSelectedIssue }) => {
   const dispatch = useDispatch();
@@ -18,9 +17,7 @@ const Issues = ({ tempIssues, issue, openED, setSelectedIssue }) => {
     (state) => state.issues
   );
 
-  const showToast = (message) => {
-    ToastAndroid.show(message || "", ToastAndroid.LONG);
-  };
+
 
   useEffect(() => {
     dispatch(getIssues());

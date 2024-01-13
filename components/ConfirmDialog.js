@@ -1,5 +1,14 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Image,
+  StyleSheet,
+  Text,
+  ToastAndroid,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import Dialog from "react-native-dialog";
+import { useDispatch } from "react-redux";
+import { deleteIssue } from "../features/issues/issuesSlice";
 
 const ConfirmDialog = ({
   visible,
@@ -8,9 +17,14 @@ const ConfirmDialog = ({
   item,
   deleteItem,
 }) => {
+  const dispatch = useDispatch();
+
   const processActivity = () => {
-    deleteItem(item.id);
+    // deleteItem(item.id);
+    console.log("item", item);
+    dispatch(deleteIssue(item._id));
   };
+
   return (
     <View>
       <Dialog.Container visible={visible} onBackdropPress={closeDialog}>
