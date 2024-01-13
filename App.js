@@ -19,7 +19,6 @@ import { issuesData } from "./tempStore";
 import EditIssue from "./components/EditIssue";
 import Issues from "./components/Issues";
 
-
 export default function App() {
   const aIbsModalRef = useRef(null);
   const eDbsModalRef = useRef(null);
@@ -78,7 +77,6 @@ export default function App() {
     ToastAndroid.show(message || "", ToastAndroid.LONG);
   };
 
-
   return (
     <Provider store={store}>
       <GestureHandlerRootView style={{ flex: 1 }}>
@@ -94,15 +92,21 @@ export default function App() {
           </View>
 
           <View style={styles.mainContent}>
-            <Issues/>
-            {issues?.map((issue, key) => (
+            <Issues
+              tempIssues={issues}
+              issue={issue}
+              openED={openED}
+              setSelectedIssue={setSelectedIssue}
+            />
+
+            {/* {issues?.map((issue, key) => (
               <Issue
                 key={key}
                 issue={issue}
                 openED={openED}
                 setSelectedIssue={setSelectedIssue}
               />
-            ))}
+            ))} */}
           </View>
 
           <TouchableOpacity style={styles.fabWrapper} onPress={openAI}>

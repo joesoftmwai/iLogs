@@ -47,13 +47,13 @@ export const issuesSlice = createSlice({
       .addCase(getIssues.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.issues = action.payload.data;
-        state.msg = action.payload;
+        state.issues = action.payload;
       })
       .addCase(getIssues.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.msg = action.payload;
+        state.issues = [];
       });
   },
 });
