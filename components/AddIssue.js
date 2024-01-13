@@ -3,7 +3,7 @@ import {
   BottomSheetModal,
   BottomSheetModalProvider,
 } from "@gorhom/bottom-sheet";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   KeyboardAvoidingView,
   Platform,
@@ -16,11 +16,12 @@ import {
 
 import { TextInput } from "react-native-gesture-handler";
 import uuid from "react-native-uuid";
-import { useDispatch } from "react-redux";
-import { getIssues } from "../features/issues/issuesSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { logIssue, reset } from "../features/issues/issuesSlice";
 
 const AddIssue = ({ modalRef, snapPoints, addIssue, close }) => {
   const dispatch = useDispatch();
+  const { isError, isSuccess, msg } = useSelector((state) => state.issues);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [dueDate, setDueDate] = useState("");
@@ -29,13 +30,12 @@ const AddIssue = ({ modalRef, snapPoints, addIssue, close }) => {
   const [status, setStatus] = useState("");
 
   const saveIssue = () => {
-    dispatch(getIssues());
     if (!title || !description || !dueDate || !priority || !status) {
       showToast("Please fill in the required fields.");
       return;
     }
     let data = {
-      id: uuid.v4(),
+      // id: uuid.v4(),
       title,
       description,
       due_date: dueDate,
@@ -44,10 +44,12 @@ const AddIssue = ({ modalRef, snapPoints, addIssue, close }) => {
       status,
     };
 
-    addIssue(data);
-    setTimeout(() => {
-      clearForm();
-    }, 2000);
+    // addIssue(data);
+    dispatch(logIssue(data));
+
+    // setTimeout(() => {
+    //   clearForm();
+    // }, 2000);
   };
 
   const showToast = (message) => {
@@ -83,6 +85,20 @@ const AddIssue = ({ modalRef, snapPoints, addIssue, close }) => {
     }
     return fPriority;
   };
+
+  useEffect(() => {
+    if (isError && msg) {
+      showToast(msg);
+    }
+    if (isSuccess && msg) {
+      showToast(msg);
+      clearForm();
+      close();
+    }
+    return () => {
+      dispatch(reset());
+    };
+  }, [isError, isSuccess, msg, dispatch]);
 
   const bottomSheetBackdrop = useCallback(
     (props) => (

@@ -22,46 +22,32 @@ const Issues = ({ tempIssues, issue, openED, setSelectedIssue }) => {
     ToastAndroid.show(message || "", ToastAndroid.LONG);
   };
 
-  const simulateFetch = async () => {
-    try {
-      const response = await axios.get(
-        "https://crudcrud.com/api/1e30c677c4464d0abfee4fb1fbdb6916/ilogs"
-      );
-      // Handle the response data
-      console.log("respeksssss", response.data);
-    } catch (error) {
-      // Handle errors
-      console.error("Axios error:", error);
-    }
-  };
-
   useEffect(() => {
-    // simulateFetch();
-    // dispatch(getIssues());
+    dispatch(getIssues());
     return () => {
       dispatch(reset());
     };
   }, [dispatch]);
 
-  useEffect(() => {
-    if (isError && msg) {
-      showToast(msg);
-    }
-    if (isSuccess && msg) {
-      showToast(msg);
-    }
-    return () => {
-      dispatch(reset());
-    };
-  }, [isError, isSuccess, msg]);
+//   useEffect(() => {
+//     if (isError && msg) {
+//       showToast(msg);
+//     }
+//     if (isSuccess && msg) {
+//       showToast(msg);
+//     }
+//     return () => {
+//       dispatch(reset());
+//     };
+//   }, [isError, msg, dispatch]);
 
   return (
     <View>
       {!isLoading ? (
         <View>
-          {tempIssues.length ? (
+          {issues.length ? (
             <View>
-              {tempIssues?.map((issue, key) => (
+              {issues?.map((issue, key) => (
                 <Issue
                   key={key}
                   issue={issue}

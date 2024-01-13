@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const BASE_URL =
-  "https://crudcrud.com/api/1e30c677c4464d0abfee4fb1fbdb6916/ilogs";
+  "https://crudcrud.com/api/8a55153d83004f318232f33791b019f5/ilogs";
 
 const getIssues = async () => {
   const response = await axios.get(BASE_URL);
@@ -20,7 +20,7 @@ const logIssue = async (data) => {
     },
   });
 
-  if (response.status != 200) {
+  if (response.status != 201) {
     return Promise.reject(response);
   }
 

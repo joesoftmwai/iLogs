@@ -108,8 +108,8 @@ export const issuesSlice = createSlice({
       .addCase(logIssue.fulfilled, (state, action) => {
         state.isProcessing = false;
         state.isSuccess = true;
-        state.issues.unshift(action.payload);
         state.msg = "Issues logged successfully.";
+        state.issues.unshift(action.payload);
       })
       .addCase(logIssue.rejected, (state, action) => {
         state.isProcessing = false;
