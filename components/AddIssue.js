@@ -16,8 +16,11 @@ import {
 
 import { TextInput } from "react-native-gesture-handler";
 import uuid from "react-native-uuid";
+import { useDispatch } from "react-redux";
+import { getIssues } from "../features/issues/issuesSlice";
 
 const AddIssue = ({ modalRef, snapPoints, addIssue, close }) => {
+  const dispatch = useDispatch();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [dueDate, setDueDate] = useState("");
@@ -26,6 +29,7 @@ const AddIssue = ({ modalRef, snapPoints, addIssue, close }) => {
   const [status, setStatus] = useState("");
 
   const saveIssue = () => {
+    dispatch(getIssues());
     if (!title || !description || !dueDate || !priority || !status) {
       showToast("Please fill in the required fields.");
       return;
