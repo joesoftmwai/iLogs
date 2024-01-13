@@ -6,8 +6,11 @@ import {
 import React, { useCallback, useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-const EditDelete = ({ modalRef, snapPoints, close, openCD, closeCD }) => {
-
+const EditDelete = ({ modalRef, snapPoints, openCD, openEdit, closeED }) => {
+  const handleUpdate = () => {
+    openEdit();
+    closeED();
+  };
   const bottomSheetBackdrop = useCallback(
     (props) => (
       <BottomSheetBackdrop
@@ -28,7 +31,7 @@ const EditDelete = ({ modalRef, snapPoints, close, openCD, closeCD }) => {
         backdropComponent={bottomSheetBackdrop}
       >
         <View style={styles.container}>
-          <TouchableOpacity style={styles.actions}>
+          <TouchableOpacity onPress={handleUpdate} style={styles.actions}>
             <Image
               style={styles.actionIcon}
               source={require("../assets/icons-edit.png")}

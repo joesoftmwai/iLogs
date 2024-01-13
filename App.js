@@ -14,13 +14,16 @@ import AddIssue from "./components/AddIssue";
 import EditDelete from "./components/EditDelete";
 import ConfirmDialog from "./components/ConfirmDialog";
 import { issuesData } from "./tempStore";
+import EditIssue from "./components/EditIssue";
 
 export default function App() {
   const aIbsModalRef = useRef(null);
   const eDbsModalRef = useRef(null);
+  const eIbsModalRef = useRef(null);
 
   const aIsnapPoints = useMemo(() => ["63%", "75%"], []);
   const eDsnapPoints = useMemo(() => ["20%"], []);
+  const eIsnapPoints = useMemo(() => ["63%", "75%"], []);
 
   const [issues, setIssues] = useState(issuesData);
   const [issue, setIssue] = useState(null);
@@ -30,6 +33,8 @@ export default function App() {
   const closeAI = () => aIbsModalRef.current.close();
   const openED = () => eDbsModalRef.current.present();
   const closeED = () => eDbsModalRef.current.close();
+  const openEI = () => eIbsModalRef.current.present();
+  const closeEI = () => eIbsModalRef.current.close();
 
   const openCD = () => setVisibleCD(true);
   const closeCD = () => setVisibleCD(false);
@@ -37,21 +42,19 @@ export default function App() {
   const addIssue = (data) => {
     console.log("data", data);
     setIssues([data, ...issues]);
-    showToast("Issue updated successfully.");
+    showToast("Issue logged successfully.");
     closeAI();
+  };
+
+  const editIssue = (data) => {
+    console.log("Editiiing");
   };
 
   const deleteIssue = (issueId) => {
     if (!issueId) return;
 
     let issuesArr = [...issues];
-
     const index = issuesArr.findIndex((item) => item.id === issueId);
-
-    console.log("issueId::::::::::::", issueId);
-    console.log("index::::::::::::", index);
-
-    
 
     if (index !== -1) {
       issuesArr.splice(index, 1);
@@ -107,13 +110,21 @@ export default function App() {
         addIssue={addIssue}
         close={closeAI}
       />
+      <EditIssue
+        modalRef={eIbsModalRef}
+        snapPoints={eIsnapPoints}
+        issue={issue}
+        editIssue={editIssue}
+      />
+
       <EditDelete
         modalRef={eDbsModalRef}
         snapPoints={eDsnapPoints}
-        close={closeED}
         openCD={openCD}
         closeCD={closeCD}
         deleteItem={deleteIssue}
+        openEdit={openEI}
+        closeED={closeED}
       />
       <ConfirmDialog
         visible={visibleCD}
@@ -155,8 +166,8 @@ const styles = StyleSheet.create({
 
   fabWrapper: {
     position: "absolute",
-    bottom: 25,
-    right: 15,
+    bottom: 17,
+    right: 17,
   },
 
   fab: {

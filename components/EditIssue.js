@@ -17,8 +17,8 @@ import {
 import { TextInput } from "react-native-gesture-handler";
 import uuid from "react-native-uuid";
 
-const AddIssue = ({ modalRef, snapPoints, addIssue, close }) => {
-  const [title, setTitle] = useState("");
+const EditIssue = ({ modalRef, snapPoints, issue, editIssue }) => {
+  const [title, setTitle] = useState("issue?.title");
   const [description, setDescription] = useState("");
   const [dueDate, setDueDate] = useState("");
   const [estimateIssue, setEstimateIssue] = useState("");
@@ -26,6 +26,8 @@ const AddIssue = ({ modalRef, snapPoints, addIssue, close }) => {
   const [status, setStatus] = useState("");
 
   const saveIssue = () => {
+    console.log("issue::::::", issue);
+
     if (!title || !description || !dueDate || !priority || !status) {
       showToast("Please fill in the required fields.");
       return;
@@ -40,7 +42,7 @@ const AddIssue = ({ modalRef, snapPoints, addIssue, close }) => {
       status,
     };
 
-    addIssue(data);
+    editIssue(data);
     setTimeout(() => {
       clearForm();
     }, 2000);
@@ -100,7 +102,7 @@ const AddIssue = ({ modalRef, snapPoints, addIssue, close }) => {
         backdropComponent={bottomSheetBackdrop}
       >
         <View style={styles.container}>
-          <Text style={styles.title}>New Issue</Text>
+          <Text style={styles.title}>Edit Issue</Text>
 
           <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -198,7 +200,7 @@ const AddIssue = ({ modalRef, snapPoints, addIssue, close }) => {
             </View>
 
             <TouchableOpacity style={styles.addButton} onPress={saveIssue}>
-              <Text style={styles.btnText}>Save Issue</Text>
+              <Text style={styles.btnText}>Update Issue</Text>
             </TouchableOpacity>
           </KeyboardAvoidingView>
         </View>
@@ -283,4 +285,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddIssue;
+export default EditIssue;
