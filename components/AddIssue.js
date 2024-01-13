@@ -43,7 +43,6 @@ const AddIssue = ({
       return;
     }
     let data = {
-      // id: uuid.v4(),
       title,
       description,
       due_date: dueDate,
@@ -52,12 +51,7 @@ const AddIssue = ({
       status,
     };
 
-    // addIssue(data);
     dispatch(logIssue(data));
-
-    // setTimeout(() => {
-    //   clearForm();
-    // }, 2000);
   };
 
   const showToast = (message) => {
@@ -79,26 +73,6 @@ const AddIssue = ({
     closeEI();
     closeED();
     closeCD();
-  };
-
-  const formatPriority = (data) => {
-    if (!data) return;
-    let fPriority = null;
-    switch (data.toLowerCase()) {
-      case 1:
-        fPriority = "Low";
-        break;
-      case 2:
-        fPriority = "Medium";
-      case 3:
-        fPriority = "High";
-        break;
-
-      default:
-        fPriority = "Low";
-        break;
-    }
-    return fPriority;
   };
 
   useEffect(() => {

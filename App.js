@@ -139,6 +139,7 @@ export default function App() {
           deleteItem={deleteIssue}
           openEdit={openEI}
           closeED={closeED}
+          issue={issue}
         />
         <ConfirmDialog
           visible={visibleCD}

@@ -122,7 +122,7 @@ export const issuesSlice = createSlice({
       .addCase(getIisssue.fulfilled, (state, action) => {
         state.isLoadingI = false;
         state.isSuccess = true;
-        state.issues = action.payload;
+        state.iIssue = action.payload;
       })
       .addCase(getIisssue.rejected, (state, action) => {
         state.isLoadingI = false;

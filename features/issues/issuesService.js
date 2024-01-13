@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const BASE_URL =
-  "https://crudcrud.com/api/8a55153d83004f318232f33791b019f5/ilogs";
+  "https://crudcrud.com/api/b490d9353d054a93a645972625b03827/ilogs";
 
 const getIssues = async () => {
   const response = await axios.get(BASE_URL);

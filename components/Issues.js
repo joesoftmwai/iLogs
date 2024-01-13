@@ -17,8 +17,6 @@ const Issues = ({ tempIssues, issue, openED, setSelectedIssue }) => {
     (state) => state.issues
   );
 
-
-
   useEffect(() => {
     dispatch(getIssues());
     return () => {
