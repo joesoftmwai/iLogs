@@ -51,11 +51,13 @@ export const getIisssue = createAsyncThunk(
 
 export const updateIssue = createAsyncThunk(
   "update-issue",
-  async (data, thunkAPI) => {
+  async (issue, thunkAPI) => {
     try {
-      return await issuesService.updateIssue(data);
+      return await issuesService.updateIssue(issue.id, issue.data);
     } catch (error) {
+      console.error("error", error.message);
       const message = handleFailure(error);
+
       return thunkAPI.rejectWithValue(message);
     }
   }
@@ -138,6 +140,10 @@ export const issuesSlice = createSlice({
         state.isProcessing = false;
         state.isSuccess = true;
         state.msg = "Issues Updated successfully.";
+        const index = state.issues.findIndex(
+          (issue) => issue._id == action.payload._id
+        );
+        if (index != -1) state.issues.splice(index, 1, action.payload);
       })
       .addCase(updateIssue.rejected, (state, action) => {
         state.isProcessing = false;

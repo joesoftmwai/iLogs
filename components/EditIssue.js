@@ -16,9 +16,11 @@ import {
 
 import { TextInput } from "react-native-gesture-handler";
 import uuid from "react-native-uuid";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { updateIssue } from "../features/issues/issuesSlice";
 
 const EditIssue = ({ modalRef, snapPoints, issue, editIssue }) => {
+  const dispatch = useDispatch();
   const { iIssue } = useSelector((state) => state.issues);
   const [title, setTitle] = useState(iIssue?.title || "");
   const [description, setDescription] = useState("");
@@ -33,7 +35,6 @@ const EditIssue = ({ modalRef, snapPoints, issue, editIssue }) => {
       return;
     }
     let data = {
-      id: uuid.v4(),
       title,
       description,
       due_date: dueDate,
@@ -42,10 +43,13 @@ const EditIssue = ({ modalRef, snapPoints, issue, editIssue }) => {
       status,
     };
 
-    editIssue(data);
-    setTimeout(() => {
-      clearForm();
-    }, 2000);
+    dispatch(updateIssue({id: iIssue._id, data: data}));
+
+    // editIssue(data);
+    // _id: iIssue._id,
+    // setTimeout(() => {
+    //   clearForm();
+    // }, 2000);
   };
 
   const showToast = (message) => {
@@ -61,19 +65,14 @@ const EditIssue = ({ modalRef, snapPoints, issue, editIssue }) => {
     setStatus("");
   };
 
-  const preset = () => {
+  useEffect(() => {
     setTitle(iIssue?.title);
     setDescription(iIssue?.description);
     setDueDate(iIssue?.due_date);
     setEstimateIssue(iIssue?.estimate_issue);
     setPriority(iIssue?.priority);
     setStatus(iIssue?.status);
-  };
-
-  useEffect(() => {
-    // preset();
-    console.log("ios::", iIssue);
-  }, []);
+  }, [iIssue]);
 
   const bottomSheetBackdrop = useCallback(
     (props) => (

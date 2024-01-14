@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const BASE_URL =
-  "https://crudcrud.com/api/b490d9353d054a93a645972625b03827/ilogs";
+  "https://crudcrud.com/api/51c561e877324bce82d5d6085f6e31a2/ilogs";
 
 const getIssues = async () => {
   const response = await axios.get(BASE_URL);
@@ -37,8 +37,8 @@ const getIisssue = async (id) => {
   return response.data;
 };
 
-const updateIssue = async (data) => {
-  const response = await axios.put(BASE_URL, data, {
+const updateIssue = async (id, data) => {
+  const response = await axios.put(`${BASE_URL}/${id}`, data, {
     headers: {
       "Content-Type": "application/json",
     },
@@ -48,7 +48,7 @@ const updateIssue = async (data) => {
     return Promise.reject(response);
   }
 
-  return response;
+  return { ...data, _id: id };
 };
 
 const deleteIssue = async (id) => {
