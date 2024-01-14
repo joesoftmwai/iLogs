@@ -3,7 +3,7 @@ import {
   BottomSheetModal,
   BottomSheetModalProvider,
 } from "@gorhom/bottom-sheet";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   KeyboardAvoidingView,
   Platform,
@@ -16,9 +16,13 @@ import {
 
 import { TextInput } from "react-native-gesture-handler";
 import uuid from "react-native-uuid";
+import { useDispatch, useSelector } from "react-redux";
+import { updateIssue } from "../features/issues/issuesSlice";
 
 const EditIssue = ({ modalRef, snapPoints, issue, editIssue }) => {
-  const [title, setTitle] = useState("issue?.title");
+  const dispatch = useDispatch();
+  const { iIssue } = useSelector((state) => state.issues);
+  const [title, setTitle] = useState(iIssue?.title || "");
   const [description, setDescription] = useState("");
   const [dueDate, setDueDate] = useState("");
   const [estimateIssue, setEstimateIssue] = useState("");
@@ -26,14 +30,11 @@ const EditIssue = ({ modalRef, snapPoints, issue, editIssue }) => {
   const [status, setStatus] = useState("");
 
   const saveIssue = () => {
-    console.log("issue::::::", issue);
-
     if (!title || !description || !dueDate || !priority || !status) {
       showToast("Please fill in the required fields.");
       return;
     }
     let data = {
-      id: uuid.v4(),
       title,
       description,
       due_date: dueDate,
@@ -42,10 +43,13 @@ const EditIssue = ({ modalRef, snapPoints, issue, editIssue }) => {
       status,
     };
 
-    editIssue(data);
-    setTimeout(() => {
-      clearForm();
-    }, 2000);
+    dispatch(updateIssue({id: iIssue._id, data: data}));
+
+    // editIssue(data);
+    // _id: iIssue._id,
+    // setTimeout(() => {
+    //   clearForm();
+    // }, 2000);
   };
 
   const showToast = (message) => {
@@ -60,27 +64,15 @@ const EditIssue = ({ modalRef, snapPoints, issue, editIssue }) => {
     setPriority("Low");
     setStatus("");
   };
-  const formatPriority = (data) => {
-    console.log("data", data);
 
-    if (!data) return;
-    let fPriority = null;
-    switch (data.toLowerCase()) {
-      case 1:
-        fPriority = "Low";
-        break;
-      case 2:
-        fPriority = "Medium";
-      case 3:
-        fPriority = "High";
-        break;
-
-      default:
-        fPriority = "Low";
-        break;
-    }
-    return fPriority;
-  };
+  useEffect(() => {
+    setTitle(iIssue?.title);
+    setDescription(iIssue?.description);
+    setDueDate(iIssue?.due_date);
+    setEstimateIssue(iIssue?.estimate_issue);
+    setPriority(iIssue?.priority);
+    setStatus(iIssue?.status);
+  }, [iIssue]);
 
   const bottomSheetBackdrop = useCallback(
     (props) => (

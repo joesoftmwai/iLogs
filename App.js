@@ -6,8 +6,10 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { Provider, useSelector } from "react-redux";
+import { store } from "./store";
 import Issue from "./components/Issue";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import AddIssue from "./components/AddIssue";
@@ -15,6 +17,7 @@ import EditDelete from "./components/EditDelete";
 import ConfirmDialog from "./components/ConfirmDialog";
 import { issuesData } from "./tempStore";
 import EditIssue from "./components/EditIssue";
+import Issues from "./components/Issues";
 
 export default function App() {
   const aIbsModalRef = useRef(null);
@@ -75,65 +78,78 @@ export default function App() {
   };
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <View style={styles.container}>
-        <View style={styles.appBar}>
-          <Text style={styles.appTitle}>iLogs</Text>
-          <TouchableOpacity>
-            <Image
-              style={styles.search}
-              source={require("./assets/icons-search-100.png")}
-            />
-          </TouchableOpacity>
-        </View>
+    <Provider store={store}>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <View style={styles.container}>
+          <View style={styles.appBar}>
+            <Text style={styles.appTitle}>iLogs</Text>
+            <TouchableOpacity>
+              <Image
+                style={styles.search}
+                source={require("./assets/icons-search-100.png")}
+              />
+            </TouchableOpacity>
+          </View>
 
-        <View style={styles.mainContent}>
-          {issues?.map((issue, key) => (
-            <Issue
-              key={key}
+          <View style={styles.mainContent}>
+            <Issues
+              tempIssues={issues}
               issue={issue}
               openED={openED}
               setSelectedIssue={setSelectedIssue}
             />
-          ))}
-        </View>
 
-        <TouchableOpacity style={styles.fabWrapper} onPress={openAI}>
-          <View style={styles.fab}>
-            <Text style={styles.fabText}>+</Text>
+            {/* {issues?.map((issue, key) => (
+              <Issue
+                key={key}
+                issue={issue}
+                openED={openED}
+                setSelectedIssue={setSelectedIssue}
+              />
+            ))} */}
           </View>
-        </TouchableOpacity>
-      </View>
-      <AddIssue
-        modalRef={aIbsModalRef}
-        snapPoints={aIsnapPoints}
-        addIssue={addIssue}
-        close={closeAI}
-      />
-      <EditIssue
-        modalRef={eIbsModalRef}
-        snapPoints={eIsnapPoints}
-        issue={issue}
-        editIssue={editIssue}
-      />
 
-      <EditDelete
-        modalRef={eDbsModalRef}
-        snapPoints={eDsnapPoints}
-        openCD={openCD}
-        closeCD={closeCD}
-        deleteItem={deleteIssue}
-        openEdit={openEI}
-        closeED={closeED}
-      />
-      <ConfirmDialog
-        visible={visibleCD}
-        showDialog={openCD}
-        closeDialog={closeCD}
-        item={issue}
-        deleteItem={deleteIssue}
-      />
-    </GestureHandlerRootView>
+          <TouchableOpacity style={styles.fabWrapper} onPress={openAI}>
+            <View style={styles.fab}>
+              <Text style={styles.fabText}>+</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+        <AddIssue
+          modalRef={aIbsModalRef}
+          snapPoints={aIsnapPoints}
+          addIssue={addIssue}
+          close={closeAI}
+          closeEI={closeEI}
+          closeED={closeED}
+          closeCD={closeCD}
+        />
+        <EditIssue
+          modalRef={eIbsModalRef}
+          snapPoints={eIsnapPoints}
+          issue={issue}
+          editIssue={editIssue}
+        />
+
+        <EditDelete
+          modalRef={eDbsModalRef}
+          snapPoints={eDsnapPoints}
+          openCD={openCD}
+          closeCD={closeCD}
+          deleteItem={deleteIssue}
+          openEdit={openEI}
+          closeED={closeED}
+          issue={issue}
+        />
+        <ConfirmDialog
+          visible={visibleCD}
+          showDialog={openCD}
+          closeDialog={closeCD}
+          item={issue}
+          deleteItem={deleteIssue}
+        />
+      </GestureHandlerRootView>
+    </Provider>
   );
 }
 

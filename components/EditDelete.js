@@ -3,13 +3,26 @@ import {
   BottomSheetModal,
   BottomSheetModalProvider,
 } from "@gorhom/bottom-sheet";
-import React, { useCallback, useState } from "react";
+import React, { useCallback } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useDispatch } from "react-redux";
+import { getIisssue } from "../features/issues/issuesSlice";
 
-const EditDelete = ({ modalRef, snapPoints, openCD, openEdit, closeED }) => {
+const EditDelete = ({
+  modalRef,
+  snapPoints,
+  openCD,
+  openEdit,
+  closeED,
+  issue,
+}) => {
+  const dispatch = useDispatch();
   const handleUpdate = () => {
     openEdit();
     closeED();
+    if (issue) {
+      dispatch(getIisssue(issue._id));
+    }
   };
   const bottomSheetBackdrop = useCallback(
     (props) => (

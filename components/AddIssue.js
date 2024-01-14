@@ -3,7 +3,7 @@ import {
   BottomSheetModal,
   BottomSheetModalProvider,
 } from "@gorhom/bottom-sheet";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   KeyboardAvoidingView,
   Platform,
@@ -16,8 +16,20 @@ import {
 
 import { TextInput } from "react-native-gesture-handler";
 import uuid from "react-native-uuid";
+import { useDispatch, useSelector } from "react-redux";
+import { logIssue, reset } from "../features/issues/issuesSlice";
 
-const AddIssue = ({ modalRef, snapPoints, addIssue, close }) => {
+const AddIssue = ({
+  modalRef,
+  snapPoints,
+  addIssue,
+  close,
+  closeEI,
+  closeED,
+  closeCD,
+}) => {
+  const dispatch = useDispatch();
+  const { isError, isSuccess, msg } = useSelector((state) => state.issues);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [dueDate, setDueDate] = useState("");
@@ -31,7 +43,6 @@ const AddIssue = ({ modalRef, snapPoints, addIssue, close }) => {
       return;
     }
     let data = {
-      id: uuid.v4(),
       title,
       description,
       due_date: dueDate,
@@ -40,10 +51,7 @@ const AddIssue = ({ modalRef, snapPoints, addIssue, close }) => {
       status,
     };
 
-    addIssue(data);
-    setTimeout(() => {
-      clearForm();
-    }, 2000);
+    dispatch(logIssue(data));
   };
 
   const showToast = (message) => {
@@ -58,27 +66,27 @@ const AddIssue = ({ modalRef, snapPoints, addIssue, close }) => {
     setPriority("Low");
     setStatus("");
   };
-  const formatPriority = (data) => {
-    console.log("data", data);
 
-    if (!data) return;
-    let fPriority = null;
-    switch (data.toLowerCase()) {
-      case 1:
-        fPriority = "Low";
-        break;
-      case 2:
-        fPriority = "Medium";
-      case 3:
-        fPriority = "High";
-        break;
-
-      default:
-        fPriority = "Low";
-        break;
-    }
-    return fPriority;
+  const cleanup = () => {
+    clearForm();
+    close();
+    closeEI();
+    closeED();
+    closeCD();
   };
+
+  useEffect(() => {
+    if (isError && msg) {
+      showToast(msg);
+    }
+    if (isSuccess && msg) {
+      showToast(msg);
+      cleanup();
+    }
+    return () => {
+      dispatch(reset());
+    };
+  }, [isError, isSuccess, msg, dispatch]);
 
   const bottomSheetBackdrop = useCallback(
     (props) => (

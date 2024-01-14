@@ -51,7 +51,7 @@ export const issuesData = [
     description: "Designing respective screens.",
     due_date: "Jan 8",
     estimated_time: "3 hrs",
-    status: "Done",
+    status: "In progress",
     priority: "High",
   },
   // {
